@@ -137,7 +137,7 @@ def create_app(test_config=None):
             "total_questions": len(formatted_questions)
         })
     
-    @app.route("/quiz", methods=["POST"])
+    @app.route("/quizzes", methods=["POST"])
     def get_quiz_question():
         """
         Get a random question for a quiz

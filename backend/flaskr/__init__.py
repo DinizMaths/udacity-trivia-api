@@ -15,6 +15,9 @@ def create_app(test_config=None):
 
     @app.after_request
     def after_request(response):
+        """
+        Set Access-Control-Allow
+        """
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
 
@@ -22,6 +25,9 @@ def create_app(test_config=None):
     
     @app.route("/")
     def index():
+        """
+        Index route
+        """
         return jsonify({
             "success": True,
             "message": "Welcome to the Trivia API!"
@@ -29,6 +35,9 @@ def create_app(test_config=None):
     
     @app.route("/categories")
     def get_categories():
+        """
+        Get all categories
+        """
         categories = db.session.query(Category).all()
         formatted_categories = [category.format() for category in categories]
 
@@ -39,6 +48,9 @@ def create_app(test_config=None):
     
     @app.route("/questions")
     def get_questions():
+        """
+        Get all questions
+        """
         page = request.args.get("page", 1, type=int)
         start = (page - 1) * QUESTIONS_PER_PAGE
         end = start + QUESTIONS_PER_PAGE
@@ -57,6 +69,9 @@ def create_app(test_config=None):
     
     @app.route("/questions/<int:question_id>", methods=["DELETE"])
     def delete_question(question_id):
+        """
+        Delete a question by id
+        """
         question = db.session.query(Question).get(question_id)
 
         if question is None:
@@ -72,6 +87,9 @@ def create_app(test_config=None):
 
     @app.route("/questions", methods=["POST"])
     def create_question():
+        """
+        Create a new question
+        """
         data = request.get_json()
 
         question = Question(
@@ -90,6 +108,9 @@ def create_app(test_config=None):
     
     @app.route("/questions/search", methods=["POST"])
     def search_questions():
+        """
+        Search questions by search term
+        """
         data = request.get_json()
         search_term = data["searchTerm"]
 
@@ -104,6 +125,9 @@ def create_app(test_config=None):
 
     @app.route("/categories/<int:category_id>/questions")
     def get_questions_by_category(category_id):
+        """
+        Get questions by category id
+        """
         questions = db.session.query(Question).filter(Question.category == category_id).all()
         formatted_questions = [question.format() for question in questions]
 
@@ -115,6 +139,9 @@ def create_app(test_config=None):
     
     @app.route("/quiz", methods=["POST"])
     def get_quiz_question():
+        """
+        Get a random question for a quiz
+        """
         data = request.get_json()
         previous_questions = data["previous_questions"]
         quiz_category = data["quiz_category"]
@@ -141,6 +168,9 @@ def create_app(test_config=None):
     
     @app.errorhandler(404)
     def not_found(error):
+        """
+        Error handler for 404
+        """
         return jsonify({
             "success": False,
             "message": "Not found"
@@ -148,6 +178,9 @@ def create_app(test_config=None):
     
     @app.errorhandler(422)
     def unprocessable_entity(error):
+        """
+        Error handler for 422
+        """
         return jsonify({
             "success": False,
             "message": "Unprocessable entity"

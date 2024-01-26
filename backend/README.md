@@ -24,6 +24,17 @@ pip install -r requirements.txt
 
 ### Set up the Database
 
+Create Environment Variables in Windows:
+
+```bash
+set FLASK_APP=flaskr
+set FLASK_ENV=development
+set DB_USER=YOUR_USER
+set DB_PASSWORD=YOUR_PASS
+set DB_HOST=localhost
+set DB_PORT=5432
+```
+
 With Postgres running, create a `trivia` database:
 
 ```bash
@@ -101,13 +112,4 @@ dropdb trivia_test
 createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
-```
-
-```bash
-set FLASK_APP=flaskr
-set FLASK_ENV=development
-set DB_USER=postgres
-set DB_PASSWORD=pgsql
-set DB_HOST=localhost
-set DB_PORT=5432
 ```

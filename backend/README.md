@@ -35,6 +35,8 @@ set DB_HOST=localhost
 set DB_PORT=5432
 ```
 
+Remenber to replace `YOUR_USER` and `YOUR_PASS` with your Postgres username and password.
+
 With Postgres running, create a `trivia` database:
 
 ```bash
@@ -59,51 +61,192 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## To Do Tasks
+## Documentation
 
-These are the files you'd want to edit in the backend:
+### `GET /`
 
-1. `backend/flaskr/__init__.py`
-2. `backend/test_flaskr.py`
+  Returns a json object with success message.
 
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior.
+  ```json
+  {
+    "success": True,
+    "message": "Welcome to the Trivia API!"
+  }
+  ```
 
-1. Use Flask-CORS to enable cross-domain requests and set response headers.
-2. Create an endpoint to handle `GET` requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories.
-3. Create an endpoint to handle `GET` requests for all available categories.
-4. Create an endpoint to `DELETE` a question using a question `ID`.
-5. Create an endpoint to `POST` a new question, which will require the question and answer text, category, and difficulty score.
-6. Create a `POST` endpoint to get questions based on category.
-7. Create a `POST` endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question.
-8. Create a `POST` endpoint to get questions to play the quiz. This endpoint should take a category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
-9. Create error handlers for all expected errors including 400, 404, 422, and 500.
+### `GET /categories`
+  
+  Returns a json object with a list of categories.
 
-## Documenting your Endpoints
+  ```json
+  {
+    "success": True,
+    "categories": {
+      "1": "Science",
+      "2": "Art",
+      "3": "Geography",
+      "4": "History",
+      "5": "Entertainment",
+      "6": "Sports"
+    }
+  }
+  ```
 
-You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
+### `GET /questions`
 
-### Documentation Example
+  Returns a json object with a list of questions, total number of questions, categories and current category.
 
-`GET '/api/v1.0/categories'`
+  ```json
+  {
+    "success": True,
+    "questions": [
+      {
+        "id": 1,
+        "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+        "answer": "Apollo 13",
+        "category": 5,
+        "difficulty": 4
+      },
+      {
+        "id": 2,
+        "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+        "answer": "Tom Cruise",
+        "category": 5,
+        "difficulty": 4
+      },
+      ...
+    ],
+    "total_questions": 19,
+    "categories": {
+      "1": "Science",
+      "2": "Art",
+      "3": "Geography",
+      "4": "History",
+      "5": "Entertainment",
+      "6": "Sports"
+    },
+    "current_category": None
+  }
+  ```
 
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+### `DELETE /questions/<int:question_id>`
+    
+  Deletes the question with the given id.
 
-```json
-{
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
-}
-```
+  Returns a json object with the id of the deleted question.
+
+  ```json
+  {
+    "success": True,
+    "message": "Question successfully deleted"
+  }
+  ```
+
+### `POST /questions`
+
+  Creates a new question.
+
+  Returns a json object with the id of the created question.
+
+  ```json
+  {
+    "success": True,
+    "message": "Question successfully created"
+  }
+  ```
+
+### `POST /questions/search`
+  
+  Searches for questions that contain the given search term.
+
+  Returns a json object with a list of questions, total number of questions, categories and current category.
+
+  ```json
+  {
+    "success": True,
+    "questions": [
+      {
+        "id": 1,
+        "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+        "answer": "Apollo 13",
+        "category": 5,
+        "difficulty": 4
+      },
+      {
+        "id": 2,
+        "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+        "answer": "Tom Cruise",
+        "category": 5,
+        "difficulty": 4
+      },
+      ...
+    ],
+    "total_questions": 19,
+    "categories": {
+      "1": "Science",
+      "2": "Art",
+      "3": "Geography",
+      "4": "History",
+      "5": "Entertainment",
+      "6": "Sports"
+    }
+  }
+  ```
+
+### `GET /categories/<int:category_id>/questions`
+  
+  Returns a json object with a list of questions, total number of questions, categories and current category.
+
+  ```json
+  {
+    "success": True,
+    "questions": [
+      {
+        "id": 1,
+        "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+        "answer": "Apollo 13",
+        "category": 5,
+        "difficulty": 4
+      },
+      {
+        "id": 2,
+        "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
+        "answer": "Tom Cruise",
+        "category": 5,
+        "difficulty": 4
+      },
+      ...
+    ],
+    "total_questions": 19,
+    "categories": {
+      "1": "Science",
+      "2": "Art",
+      "3": "Geography",
+      "4": "History",
+      "5": "Entertainment",
+      "6": "Sports"
+    }
+  }
+  ```
+
+### `POST /quizzes`
+  
+  Returns a json object with a random question from the given category.
+
+  ```json
+  {
+    "success": True,
+    "question": {
+      "id": 1,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4
+    }
+  }
+  ```
 
 ## Testing
-
-Write at least one test for the success and at least one error behavior of each endpoint using the unittest library.
 
 To deploy the tests, run
 
